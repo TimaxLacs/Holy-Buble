@@ -18,6 +18,7 @@ gc = gspread.service_account()
 sh = gc.open("holy buble")
 worksheet1 = sh.worksheet("Библиотека").get_all_records()
 # Состояния
+worksheet2 = sh.worksheet("отзывы")
 class St(StatesGroup):
     book0 = State()  # Поиск книги
     book = State()  # Поиск книги
@@ -152,7 +153,7 @@ async def process_book_name(message: types.Message, state: FSMContext):
                             biblioteka = (i["название"])
                         await message.answer(
                             f'В библиотеки по этому адресу есть нужная вам книга: {adress}.\n Название библиотеки: {biblioteka}.\n Вот растояние до этой библиотеки: {shot_rast}.',
-                            reply_markup=kb.keyboard_back)
+                            reply_markup=kb.keyboard_back_and_otz)
                     else:
                         print("Название библиотеки не коректное")
             else:
@@ -160,6 +161,24 @@ async def process_book_name(message: types.Message, state: FSMContext):
     if b2 == 0:
         await message.reply("такой книги нет", reply_markup=kb.keyboard_back)
     await state.finish()
+
+
+@dp.message_handler(text="введите отзыв")
+async def process_help_command(msg: types.Message, state: FSMContext):
+    data = await state.get_data()
+    texts = await state.get_data()
+    texts = msg.text
+    await msg.answer("осталось только отправить", reply_markup=kb.key_otz1)
+
+
+@dp.message_handler(text="отправить")
+async def process_help_command(msg: types.Message, state: FSMContext):
+    data = await state.get_data()
+    texts = await state.get_data()
+    lost = {data: texts}
+    worksheet2.append_row(lost)
+
+
 if __name__ == '__main__':
     worksheet_biblioteki = gsheets()
     worksheet_poisk = knigi()

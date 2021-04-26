@@ -195,7 +195,6 @@ async def process_book_name(message: types.Message, state: FSMContext):
 @dp.message_handler(text="введите отзыв")
 async def process_help_command(msg: types.Message, state: FSMContext):
     data = await state.get_data()
-    print(data['book'])
     texts = await state.get_data()
     texts = msg.text
     await msg.reply("осталось только отправить", reply_markup=kb.but_otz1)
@@ -208,6 +207,16 @@ async def process_help_command(msg: types.Message, state: FSMContext):
     texts = await state.get_data()
     lost = {data: texts}
     worksheet2.append_row(lost)
+
+
+
+@dp.message_handler(text="отправить")
+async def process_help_command(msg: types.Message, state: FSMContext):
+    data = await state.get_data()
+    texts = await state.get_data()
+    lost = {data: texts}
+    worksheet2.append_row(lost)
+
 
 #@dp.message_handler(text="просмотреть отзовы")
 #async def process_help_command(msg: types.Message, state: FSMContext):
