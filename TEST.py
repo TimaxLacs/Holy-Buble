@@ -207,7 +207,7 @@ if __name__ == '__main__':
     worksheet_poisk = knigi()
     executor.start_polling(dp, skip_updates=True)
 
-# TODO ээээ..... потом кароч доделаю
+# TODO ээээ..... потом кароч доделаю(система отзывов книг)
 
 
 

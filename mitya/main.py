@@ -208,23 +208,23 @@ async def process_book_name(message: types.Message, state: FSMContext):
     bronurovanie = "забронировано"
     nalich = "есть в наличии"
     b2 = 0
-    d = {}
     nebron = 'не забобронировано'
     for sd in worksheet_poisk:
         nazvsnie_biblioteki = sd
         spisok_knig = worksheet_poisk[nazvsnie_biblioteki]
-        print(spisok_knig)
         for kniga in spisok_knig:
             cv = kniga['книга']
             bron = kniga['бронь']
             bronurovanie = "забронировано"
+            stroka = f'книга: {cv}, наличие: {nalich}, бронь: {bronurovanie}'
+            puti = f'{spisok_knig}: {stroka}'
             if cv.lower() == text1 and bron == nebron and nalich == kniga['наличие']:
                 for i in worksheet_biblioteki:
                     nazvanie = i["название"]
                     if nazvanie == sd:
-
-                        # TODO Сделать систему наличия книг, чтобы она сравнила есть в наличии или нет книга.
-
+                        print(kniga)
+                        print(type(kniga))
+                        dict.update({nazvsnie_biblioteki: puti})
                         print('Книга числится в библиотеке')
                         b2 = 1
                         f = (i["кординаты"].split(", "))
