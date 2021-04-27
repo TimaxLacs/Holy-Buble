@@ -1,0 +1,5 @@
+
+text =
+
+s =
+print(s)
