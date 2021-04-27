@@ -1,18 +1,31 @@
-# import PySimpleGUI as sg
-import webbrowser
-import PySimpleGUIWeb as sg
+import PySimpleGUI as gu
+import webbrowser as web
+import PySimpleGUIWeb as gweb
 import PySimpleGUIWx as sg
 
+# Функции и кнопки окон
+layout = [[sg.Text('Какой-то текст', key='sss')],  # Ключ(Key="sss") для вызова изменении
+          [sg.Text('Enter something on Row 2'), sg.InputText()],  # InputText - небольшое окно для ввода текста
+          [sg.Button('Ok', size=(10, 2)), sg.Button('Отмена')],
+          [sg.Button('ffggg')]]
 
-# def win1():
-# win2 = sg.Window('Сеть', layout2, no_titlebar=True) # Создается новое окно без титульного бара
-# while True:
-# event, values = win2.read(timeout=200) #
-#  if not event:
-#  break
+layout2 = [[sg.Radio(text='вкл', default=True, group_id='aa'),
+            sg.Radio(text='выкл', group_id='aa')], [sg.Cancel()]]
 
-def win2():
-    layout1 = [[sg.Button("Win2")]]
+
+def win1():  # Создаем и открываем доп окна
+    win1 = sg.Window('Сеть', layout2, no_titlebar=True, grab_anywhere=True)
+    while True:
+        event, values = win1.read(timeout=200)  # Пауза обновления окна в мc  0,2 сек
+        if event == 'Cancel':
+            break
+        if not event:  # Если нет событии
+            break  # Закрыть окно
+    win1.close()
+
+
+def win2():  # Создаем и открываем доп окна
+    layout1 = [[sg.Button("Win2")]]  # Кнопка Win2
     window = sg.Window("Win2", layout1)
     while True:
         event, values = window.read(timeout=200)
@@ -26,29 +39,23 @@ sg.theme('Tan')  # Тема окна
 
 layout0 = [[sg.Text('Hi!', key='key1')]]
 
-layout = [[sg.Text('Some text on Row 1', key='sss')],
-          [sg.Text('Enter something on Row 2'), sg.InputText()],
-          [sg.Button('Ok', size=(10, 2)), sg.Button('Cancel')],
-          [sg.Button('ffggg')]]
-
-layout2 = [[sg.Radio(text='вкл', default=True, group_id='aa'), sg.Radio(text='выкл', group_id='aa')]]
-
 # Создание окно без титулбара
-window = sg.Window('Window Title', layout, location=(800, 600), no_titlebar=True)
+window = sg.Window('Window Title', layout, location=(800, 600), no_titlebar=True, grab_anywhere=True)  # Создается
+# новое окно без титульного бара
 
 # Event Loop to process "events" and get the "values" of the inputs
 while True:
 
     event, values = window.read()
-    if not net:
-        window['key1'].update('нет сооооол')
-    if event == sg.WIN_CLOSED or event == 'Cancel':  # При нажании кнопки Cancel, закрывает окно
+    if event == sg.WIN_CLOSED or event == 'Отмена':  # При нажании кнопки Cancel, закрывает окно
         break
-    if event == 'Ok':
-        print('chonibud')
-        window['sss'].update('dddd', text_color='Red')
-        webbrowser.open_new('http://google.com/')
-    if event == 'ffggg':
-        sg.Popup('нет инета ', no_titlebar=True)
+    if event == 'Ok':  # Если нажимаете кнопку OK
+        print("chonibud")  # В cmd выводиться текст ок
+        window['sss'].update('dddd', text_color='Red')  # При нажатии кнопки Ok, текст "Какой-то текст" изменяется на
+        # 'dddd' и краситься в красный
+        # webbrowser.open_new('http://google.com/') Открытие сайта в браузере
+    if event == 'ffggg':  # Если нажата кнопка 'ffggg' то появляется всплывающиеся окно с текстом 'нет инета'
+        # sg.Popup('нет инета ', no_titlebar=True) всплывающее окно с текстом
+        win1()
 
-window.close()
+window.close()  # Закрыть окно
