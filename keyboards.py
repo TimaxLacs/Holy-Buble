@@ -3,7 +3,7 @@ from aiogram.types import ReplyKeyboardRemove, \
     InlineKeyboardMarkup, InlineKeyboardButton
 
 
-markup_request = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('Отправить свою локацию 🗺️', request_location=True))
+
 
 
 keyboard_menu = ReplyKeyboardMarkup(resize_keyboard=True)
@@ -31,9 +31,8 @@ key_otz1 = ReplyKeyboardMarkup(resize_keyboard=True)
 key_otz1.add(but_otz1)
 key_otz2 = ReplyKeyboardMarkup(resize_keyboard=True)
 key_otz2.add(but_otz2)
-
 keyboard_back = ReplyKeyboardMarkup(resize_keyboard=True)
 keyboard_back.add(button_back)
 
-
+markup_request = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('Отправить свою локацию 🗺️', request_location=True), button_back)
 
