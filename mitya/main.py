@@ -206,41 +206,44 @@ async def process_book_name(message: types.Message, state: FSMContext):
     adress = "Не найдено"
     biblioteka = "Не найдено"
     bronurovanie = "забронировано"
-    nalich = "есть в наличии"
+    nalichie = "есть в наличии"
+    nevnalichie = "нету в наличии"
     b2 = 0
     nebron = 'не забобронировано'
-
-    for sd in worksheet_poisk:
-        nazvsnie_biblioteki = sd
-        spisok_knig = worksheet_poisk[nazvsnie_biblioteki]
-        for kniga in spisok_knig:
-            cv = kniga['книга']
-
-            bron = kniga['бронь']
-            bronurovanie = "забронировано"
-            if cv.lower() == text1 and bron == nebron and nalich == kniga['наличие']:
-                for i in worksheet_biblioteki:
-                    nazvanie = i["название"]
-                    if nazvanie == sd:
+    for nz in worksheet_poisk:
+        nazvanie_biblioteki = nz
+        spisok_knig = worksheet_poisk[nazvanie_biblioteki]
+        for kn in spisok_knig:
+            kniga = kn['книга']
+            bron = kn['бронь']
+            nalich = kn['наличие']
+            if kniga.lower() == text1 and nalich == nalichie and bron == nebron:
+                for bibliotek in worksheet_biblioteki:
+                    nazvanie = bibliotek['название']
+                    if nazvanie_biblioteki == nazvanie:
                         print(worksheet_poisk)
-                        worksheet_poisk.update({nazvanie: })
-                        print('Книга числится в библиотеке')
+                        print(type(worksheet_poisk))
+                        print(spisok_knig)
+                        print(type(spisok_knig))
+                        print(spisok_knig.find_all(kniga))
+                        print('Книга найдена!')
                         b2 = 1
-                        f = (i["кординаты"].split(", "))
+                        f = bibliotek["кординаты"].split(", ")
                         rast = quick_distance(message.location.latitude, message.location.longitude, float(f[0]),
                                               float(f[1]))  # Вычисление растояния до библиотеке.
                         if rast < shot_rast:
                             shot_rast = rast
-                            adress = i["адрес"]
-                            biblioteka = (i["название"])
+                            adress = bibliotek["адрес"]
                         await message.answer(
-                            f'В библиотеки по этому адресу мы нужную вам книгу: {adress}.\n Название библиотеки: {biblioteka}.\n Вот растояние до этой библиотеки: {shot_rast}.',
+                            f'В библиотеки по этому адресу мы нужную вам книгу: {adress}.\n Название библиотеки: {nazvanie_biblioteki}.\n Вот растояние до этой библиотеки: {shot_rast}.',
                             reply_markup=kb.keyboard_back)
             else:
-                print("не найдено")
+                print("Книга не подходит")
     if b2 == 0:
         await message.reply("такой книги нет", reply_markup=kb.keyboard_back)
     await state.finish()
+
+
 
 
 if __name__ == '__main__':
