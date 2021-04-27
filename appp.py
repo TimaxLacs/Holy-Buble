@@ -51,10 +51,7 @@ def quick_distance(lat1, lng1, lat2, lng2):
     return int((111.138 * sqrt(x * x + y * y)) * 1000)
 
 
-("start")
-def cmd_start(message: types.Message):
-    print(message.chat.id)
-    print("я вас слушаю, хозяин")
+
 
 ("Ближащая библиотека")
 def process_help_command(message: types.Message):
@@ -110,7 +107,7 @@ def cmd_start(message: types.Message, state: FSMContext):
 ("Найти книгу")
 def process_help_command(message: types.Message):
     print("Введите название книги",  "кнопка назад")
-    print ("отсылаем к St.book0")
+    ("отсылаем к St.book0")
 
 ("St.book0")
 def process_book_name(message: types.Message, state: FSMContext):
