@@ -42,8 +42,9 @@ def knigi():
     dict = {}
     a = 0
     for i in worksheet_biblioteki:
+        if a > 10:
+            continue
         a = a + 1
-        if a > 10: continue
         try:
             print(f'--> Обрабатываю {i["название"]}')
             worksheet_knigi = sh.worksheet(i["название"]).get_all_records()
@@ -170,7 +171,10 @@ async def process_book_name(message: types.Message, state: FSMContext):
         nazvsnie_biblioteki = sd
         spisok_knig = worksheet_poisk[nazvsnie_biblioteki]
         for kniga in spisok_knig:
+            print(spisok_knig)
+            print(kniga)
             cv = kniga['книга']
+            print(spisok_knig)
             if cv.lower() == text1 and nalich == kniga['наличие']:
                 for i in worksheet_biblioteki:
                     nazvanie = i["название"]
@@ -221,11 +225,6 @@ async def process_book_name(message: types.Message, state: FSMContext):
                 for bibliotek in worksheet_biblioteki:
                     nazvanie = bibliotek['название']
                     if nazvanie_biblioteki == nazvanie:
-                        print(worksheet_poisk)
-                        print(type(worksheet_poisk))
-                        print(spisok_knig)
-                        print(type(spisok_knig))
-                        print(spisok_knig.find_all(kniga))
                         print('Книга найдена!')
                         b2 = 1
                         f = bibliotek["кординаты"].split(", ")
@@ -242,8 +241,6 @@ async def process_book_name(message: types.Message, state: FSMContext):
     if b2 == 0:
         await message.reply("такой книги нет", reply_markup=kb.keyboard_back)
     await state.finish()
-
-
 
 
 if __name__ == '__main__':
