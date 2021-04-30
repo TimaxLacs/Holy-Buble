@@ -2,11 +2,12 @@ import PySimpleGUIWx as sg
 
 # Функции и кнопки окон
 layout = [[sg.Text('Вас приветствует мобильное приложение библиотеки!', size=(150, 50)), ],
-          [sg.Button('Поиск книги', size=(10))],
+          [sg.Button('Поиск книги', size=(10,50))],
           # [sg.Text('Enter something on Row 2'), sg.InputText()],  # InputText - небольшое окно для ввода текста
-          [sg.Button('Отмена')], ]
-# [sg.Button('очко товарища')]]
-# TODO доделать кнопки, понять как поставить местоположение текста и кнопок
+          [sg.Button('Закрыть приложение')],
+#[sg.Button('')],
+          [sg.Button('очко товарища')]]
+# TODO доделать кнопки, понять как поставить местоположение текста и кнопок(выполняется
 
 layout2 = [[sg.Radio(text='вкл', default=True, group_id='aa'),
             sg.Radio(text='выкл', group_id='aa')], [sg.Cancel()]]
@@ -16,7 +17,7 @@ def win1():  # Создаем и открываем доп окна
     win1 = sg.Window('Сеть', layout2, no_titlebar=True, grab_anywhere=True, size=(120, 500))
     while True:
         event, values = win1.read(timeout=200)  # Пауза обновления окна в мc  0,2 сек
-        if event == 'Отмена':
+        if event == 'Закрыть приложение':
             break
         if not event:  # Если нет событии
             break  # Закрыть окно
@@ -43,11 +44,10 @@ window = sg.Window('Window Title', layout, location=(800, 600), no_titlebar=True
                    size=(400, 600))  # Создается основное окно
 # новое окно без титульного бара
 
-# Event Loop to process "events" and get the "values" of the inputs
 while True:
 
     event, values = window.read()
-    if event == sg.WIN_CLOSED or event == 'Отмена':  # При нажании кнопки Cancel, закрывает окно
+    if event == sg.WIN_CLOSED or event == 'Закрыть приложение':  # При нажании кнопки Cancel, закрывает окно
         break
     if event == 'Ok':  # Если нажимаете кнопку OK
         print("chonibud")  # В cmd выводиться текст ок
