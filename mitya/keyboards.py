@@ -13,7 +13,8 @@ button_3 = "Найти книгу"
 button_4 = "Оставить отзыв о книге"
 button_5 = "Забронировать книгу"
 button_6 = "Профиль"
-keyboard_menu.add(button_1, button_2, button_3, button_4, button_5, button_6)
+button_7 = "Карта библиотек"
+keyboard_menu.add(button_1, button_2, button_3, button_4, button_5, button_6, button_7)
 
 
 keyboard_back = ReplyKeyboardMarkup(resize_keyboard=True)
