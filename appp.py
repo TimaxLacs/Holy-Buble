@@ -8,7 +8,7 @@ from gspread import WorksheetNotFound
 na_time = time.strftime('%M') # текущее время в минутах
 gc = gspread.service_account()
 sh = gc.open("holy buble")
-worksheet1 = sh.worksheet("Библиотека").get_all_records() # заходим в лисит и берем значение в виде списка
+worksheet1 = sh.worksheet("Библиотека").get_all_records() # заходим в лис и берем значение в виде списка
 worksheet2 = sh.worksheet("отзывы")
 
 

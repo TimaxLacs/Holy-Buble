@@ -12,7 +12,7 @@ import time
 import random
 
 logging.basicConfig(level=logging.INFO)
-bot = Bot(token="1703652201:AAGit3dd0CH4ZgYlWYW-OSRQskn5lTtkeRc")
+bot = Bot(token='1703652201:AAGit3dd0CH4ZgYlWYW-OSRQskn5lTtkeRc')
 dp = Dispatcher(bot, storage=MemoryStorage())
 na_time = time.strftime('%M')
 gc = gspread.service_account()
@@ -42,20 +42,19 @@ def knigi():
     dict = {}
     a = 0
     for i in worksheet_biblioteki:
-        if a > 10:
-            continue
         a = a + 1
-        try:
-            print(f'--> Обрабатываю {i["название"]}')
-            worksheet_knigi = sh.worksheet(i["название"]).get_all_records()
-            if worksheet_knigi != []:
-                kniga = [(i["название"], worksheet_knigi), ]
-                dict.update(kniga)
-                print(kniga)
-            else:
-                print('!!! -> Лист пуст <- !!!')
-        except gspread.exceptions.WorksheetNotFound:
-            print(f'!!! -> Лист "{i["название"]}" не найден <- !!!')
+        if a >= 1:
+            try:
+                print(f'--> Обрабатываю {i["название"]}')
+                worksheet_knigi = sh.worksheet(i["название"]).get_all_records()
+                if worksheet_knigi != []:
+                    kniga = [(i["название"], worksheet_knigi), ]
+                    dict.update(kniga)
+                    print(kniga)
+                else:
+                    print('!!! -> Лист пуст <- !!!')
+            except gspread.exceptions.WorksheetNotFound:
+                print(f'!!! -> Лист "{i["название"]}" не найден <- !!!')
         time.sleep(random.randint(2, 3))
     print(dict)
     return dict
@@ -166,7 +165,7 @@ async def process_book_name(message: types.Message, state: FSMContext):
     biblioteka = "Не найдено"
     b2 = 0
     d = {}
-    nalich = "есть в наличии"
+    nalich = 'есть в наличии'
     for sd in worksheet_poisk:
         nazvsnie_biblioteki = sd
         spisok_knig = worksheet_poisk[nazvsnie_biblioteki]
@@ -175,25 +174,25 @@ async def process_book_name(message: types.Message, state: FSMContext):
             print(kniga)
             cv = kniga['книга']
             print(spisok_knig)
-            if cv.lower() == text1 and nalich == kniga['наличие']:
-                for i in worksheet_biblioteki:
-                    nazvanie = i["название"]
-                    if nazvanie == sd:
-                        print('Книга числится в библиотеке')
-                        b2 = 1
-                        f = (i["кординаты"].split(", "))
-                        rast = quick_distance(message.location.latitude, message.location.longitude, float(f[0]),
-                                              float(f[1]))  # Вычисление растояния до библиотеке.
-                        if rast < shot_rast:
-                            shot_rast = rast
-                            adress = i["адрес"]
-                            biblioteka = (i["название"])
-                        await message.answer(
-                            f'В библиотеки по этому адресу есть нужная вам книга: {adress}.\n Название библиотеки: {biblioteka}.\n Вот растояние до этой библиотеки: {shot_rast}.',
-                            reply_markup=kb.keyboard_back)
-
-            else:
-                print("не найдено")
+            try:
+                if cv.lower() == text1 and nalich == kniga['наличие']:
+                    for i in worksheet_biblioteki:
+                        nazvanie = i["название"]
+                        if nazvanie == sd:
+                            print('Книга числится в библиотеке')
+                            b2 = 1
+                            f = (i["кординаты"].split(", "))
+                            rast = quick_distance(message.location.latitude, message.location.longitude, float(f[0]),
+                                                  float(f[1]))  # Вычисление растояния до библиотеке.
+                            if rast < shot_rast:
+                                shot_rast = rast
+                                adress = i["адрес"]
+                                biblioteka = (i["название"])
+                            await message.answer(
+                                f'В библиотеки по этому адресу есть нужная вам книга: {adress}.\n Название библиотеки: {biblioteka}.\n Вот растояние до этой библиотеки: {shot_rast}.',
+                                reply_markup=kb.keyboard_back)
+            except:
+                print("Что-то пошло не так")
     if b2 == 0:
         await message.reply("такой книги нет", reply_markup=kb.keyboard_back)
     await state.finish()
@@ -210,36 +209,44 @@ async def process_book_name(message: types.Message, state: FSMContext):
     adress = "Не найдено"
     biblioteka = "Не найдено"
     bronurovanie = "забронировано"
-    nalichie = "есть в наличии"
+    nalichie = 'есть в наличии'
     nevnalichie = "нету в наличии"
     b2 = 0
-    nebron = 'не забобронировано'
+    nebron = 'не забронировано'
     for nz in worksheet_poisk:
         nazvanie_biblioteki = nz
         spisok_knig = worksheet_poisk[nazvanie_biblioteki]
         for kn in spisok_knig:
+            print(kn)
             kniga = kn['книга']
             bron = kn['бронь']
             nalich = kn['наличие']
-            if kniga.lower() == text1 and nalich == nalichie and bron == nebron:
-                for bibliotek in worksheet_biblioteki:
-                    nazvanie = bibliotek['название']
-                    if nazvanie_biblioteki == nazvanie:
-                        print('Книга найдена!')
-                        b2 = 1
-                        f = bibliotek["кординаты"].split(", ")
-                        rast = quick_distance(message.location.latitude, message.location.longitude, float(f[0]),
-                                              float(f[1]))  # Вычисление растояния до библиотеке.
-                        if rast < shot_rast:
-                            shot_rast = rast
-                            adress = bibliotek["адрес"]
-                        await message.answer(
-                            f'В библиотеки по этому адресу мы нужную вам книгу: {adress}.\n Название библиотеки: {nazvanie_biblioteki}.\n Вот растояние до этой библиотеки: {shot_rast}.',
-                            reply_markup=kb.keyboard_back)
-            else:
-                print("Книга не подходит")
+            try:
+                if kniga.lower() == text1 and nalich == nalichie:
+                    if bron == nebron:
+                        for bibliotek in worksheet_biblioteki:
+                            nazvanie = bibliotek['название']
+                            if nazvanie_biblioteki == nazvanie:
+                                print(worksheet_poisk)
+                                print('Книга найдена!')
+                                b2 = 1
+                                f = bibliotek["кординаты"].split(", ")
+                                rast = quick_distance(message.location.latitude, message.location.longitude, float(f[0]),
+                                                    float(f[1]))  # Вычисление растояния до библиотеке.
+                                if rast < shot_rast:
+                                    shot_rast = rast
+                                    adress = bibliotek["адрес"]
+                                await message.answer(
+                                    f'В библиотеки по этому адресу мы нужную вам книгу: {adress}.\n Название библиотеки: {nazvanie_biblioteki}.\n Вот растояние до этой библиотеки: {shot_rast}.',
+                                    reply_markup=kb.keyboard_back)
+                    else:
+                        await message.answer('Эта книга забронирована или её нет в наличии.',
+                                    reply_markup=kb.keyboard_back)
+                        print("Данная книга забронирована")
+            except:
+                print("Что-то пошло не так")
     if b2 == 0:
-        await message.reply("такой книги нет", reply_markup=kb.keyboard_back)
+        await message.reply("Извините но данная книга забронирована", reply_markup=kb.keyboard_back)
     await state.finish()
 
 

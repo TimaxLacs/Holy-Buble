@@ -46,7 +46,7 @@ def knigi():
     a = 0
     for i in worksheet_biblioteki:
         a = a + 1
-        if a > 10: continue
+        if a > 20: continue
         try:
             print(f'--> Обрабатываю {i["название"]}')
             worksheet_knigi = sh.worksheet(i["название"]).get_all_records()
@@ -202,12 +202,61 @@ async def process_book_name(message: types.Message, state: FSMContext):
 
 
 
+@dp.message_handler(text="gb")
+async def otz(message: types.Message, state: FSMContext):
+    b2 = 0
+    d = {}
+    for sd in worksheet_poisk:
+        nazvsnie_biblioteki = sd
+        spisok_knig = worksheet_poisk[nazvsnie_biblioteki]
+        for kniga in spisok_knig:
+            bron = kniga['бронь']
+            cv = kniga['книга']
+            print(cv    ,"------", kniga,"______", bron)
+
+
+
+
+@dp.message_handler(text="отз")
+async def otz(message: types.Message, state: FSMContext):
+    for sd in worksheet_poisk:
+        print(worksheet_poisk)
+        nazvsnie_biblioteki = sd
+        spisok_knig = worksheet_poisk[nazvsnie_biblioteki]
+        for nekniga in spisok_knig:
+            cv = nekniga['книга']
+            aid = nekniga['айди']
+            bron = nekniga['бронь']
+            user_id = message.chat.id
+            ne_bron = "не забронировано"
+            print(aid, bron, cv)
+            if aid != '' and bron == ne_bron: # сравниваем и если не пустата то отсылаем юзеру который в табл сообщение о просьбе оставить отзыв
+                print(cv)
+
+                await message.answer(message.chat.id, "nbv")
+
+
+
+@dp.message_handler(text="Оставить отзыв")
+async def process_help_command(msg: types.Message, state: FSMContext):
+    await msg.answer("введите отзыв")
+    texts = msg.text
+    id = msg.chat.id
+    lost = {id: texts}
+    worksheet2.append_row(lost)
+
+
+
+
+
+
 if __name__ == '__main__':
     worksheet_biblioteki = gsheets()
     worksheet_poisk = knigi()
     executor.start_polling(dp, skip_updates=True)
 
 # TODO ээээ..... потом кароч доделаю(система отзывов книг)
+
 
 
 
