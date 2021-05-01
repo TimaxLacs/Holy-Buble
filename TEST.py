@@ -12,16 +12,16 @@ import time
 import random
 
 logging.basicConfig(level=logging.INFO)
-bot = Bot(token="1703652201:AAGit3dd0CH4ZgYlWYW-OSRQskn5lTtkeRc")
+bot = Bot(token="1255862313:AAFWPZqLgPlHH-SXkfji79nLshUjp_SqwDk")
 dp = Dispatcher(bot, storage=MemoryStorage())
 na_time = time.strftime('%M')
 gc = gspread.service_account()
 sh = gc.open("holy buble")
-worksheet1 = sh.worksheet("Библиотека").get_all_records()
-# Состояния
+worksheet1 = sh.worksheet("nazvanie").get_all_records()
+
 worksheet2 = sh.worksheet("отзывы")
 
-
+# Состояния
 class St(StatesGroup):
     book0 = State()  # Поиск книги
     book = State()  # Поиск книги
@@ -29,14 +29,14 @@ class St(StatesGroup):
     bookbron1 = State()  # Бронь книги
     text1 = State()
     texts = State()
+    pross = State()
 
 
 def gsheets():
     for i in worksheet1:
         try:
-            worksheet = sh.worksheet("Библиотека").get_all_records()
-            print(worksheet)
-            return worksheet
+            print(worksheet1)
+            return worksheet1
         except gspread.exceptions.WorksheetNotFound:
             print(f'!!! -> Страница "{i["название"]}" не найдена <- !!!')
 
@@ -44,20 +44,20 @@ def gsheets():
 def knigi():
     dict = {}
     a = 0
-    for i in worksheet_biblioteki:
+    for e in worksheet_biblioteki:
         a = a + 1
-        if a > 20: continue
+        if a >= 10:
+            continue
         try:
-            print(f'--> Обрабатываю {i["название"]}')
-            worksheet_knigi = sh.worksheet(i["название"]).get_all_records()
+            print(f'--> Обрабатываю {e["название"]}')
+            worksheet_knigi = sh.worksheet(e["название"]).get_all_records()
             if worksheet_knigi != []:
-                kniga = [(i["название"], worksheet_knigi), ]
+                kniga = [(e["название"], worksheet_knigi), ]
                 dict.update(kniga)
-                print(kniga)
             else:
                 print('!!! -> Лист пуст <- !!!')
         except gspread.exceptions.WorksheetNotFound:
-            print(f'!!! -> Лист "{i["название"]}" не найден <- !!!')
+            print(f'!!! -> Лист "{e["название"]}" не найден <- !!!')
         time.sleep(random.randint(2, 3))
     print(dict)
     return dict
@@ -202,21 +202,6 @@ async def process_book_name(message: types.Message, state: FSMContext):
 
 
 
-@dp.message_handler(text="gb")
-async def otz(message: types.Message, state: FSMContext):
-    b2 = 0
-    d = {}
-    for sd in worksheet_poisk:
-        nazvsnie_biblioteki = sd
-        spisok_knig = worksheet_poisk[nazvsnie_biblioteki]
-        for kniga in spisok_knig:
-            bron = kniga['бронь']
-            cv = kniga['книга']
-            print(cv    ,"------", kniga,"______", bron)
-
-
-
-
 @dp.message_handler(text="отз")
 async def otz(message: types.Message, state: FSMContext):
     for sd in worksheet_poisk:
@@ -224,25 +209,79 @@ async def otz(message: types.Message, state: FSMContext):
         nazvsnie_biblioteki = sd
         spisok_knig = worksheet_poisk[nazvsnie_biblioteki]
         for nekniga in spisok_knig:
+            print("---------", nekniga)
+            cv = nekniga['книга']
+            print("-----------------", cv)
+            aid = nekniga['айди']
+            print(aid)
+            user_id = message.chat.id
+            bron = nekniga['бронь']
+            ne_bron = "не забронировано"
+            print(aid, bron)
+            if aid == user_id and bron == ne_bron : # сравниваем и если не пустата то отсылаем юзеру который в табл сообщение о просьбе оставить отзыв
+                print( aid)
+                await message.answer(f"вы недавно прочитали книгу '{cv}', не хотите ли оставить отзыв?", reply_markup=kb.key_otz)
+
+
+@dp.message_handler(text="Оставить отзыв")
+async def process_help_command(message: types.Message, state: FSMContext):
+    await message.answer("введите отзыв")
+    await St.texts.set()
+
+
+
+@dp.message_handler(state=St.texts)
+async def process_help_command(message: types.Message, state: FSMContext):
+    print("+++++++++++++++")
+    for sd in worksheet_poisk:
+        nazvsnie_biblioteki = sd
+        spisok_knig = worksheet_poisk[nazvsnie_biblioteki]
+        for nekniga in spisok_knig:
             cv = nekniga['книга']
             aid = nekniga['айди']
-            bron = nekniga['бронь']
             user_id = message.chat.id
+            texts = message.text
+            bron = nekniga['бронь']
             ne_bron = "не забронировано"
-            print(aid, bron, cv)
-            if aid != '' and bron == ne_bron: # сравниваем и если не пустата то отсылаем юзеру который в табл сообщение о просьбе оставить отзыв
-                print(cv)
+            if bron == ne_bron and aid == user_id:
+                lost = [cv, texts, user_id]
+                worksheet2.append_row(lost)
+                await message.answer("отзыв оставлен")
+    await state.finish()
 
-                await message.answer(message.chat.id, "nbv")
+
+
+
+@dp.message_handler(text="Посмотреть отзовы")
+async def process_help_command(message: types.Message, state: FSMContext):
+    await message.answer("Отзывы к какой книге вы хотите посмотреть?")
+    await St.pross.set()
+
+
+@dp.message_handler(text=St.pross)
+async def process_help_command(message: types.Message, state: FSMContext):
+    for sd in worksheet_poisk:
+        print(worksheet_poisk)
+        nazvsnie_biblioteki = sd
+        spisok_knig = worksheet_poisk[nazvsnie_biblioteki]
+        for nekniga in spisok_knig:
+            cv = nekniga['книга']
+            aid = nekniga['айди']
+            texts = message.text.lower()
+            await message.reply(texts)
+            otz = nekniga['отзыв']
+            if aid != '' and cv == texts:
+                await message.answer(f"отзыв о книге{cv}:\n {otz}\n его написал пользователь с id{aid}")
 
 
 
 @dp.message_handler(text="Оставить отзыв")
 async def process_help_command(msg: types.Message, state: FSMContext):
-    await msg.answer("введите отзыв")
+    await msg.answer("Введите отзыв")
     texts = msg.text
     id = msg.chat.id
     lost = {id: texts}
+
     worksheet2.append_row(lost)
 
 
@@ -261,13 +300,11 @@ if __name__ == '__main__':
 
 
 
-
-
 @dp.message_handler(text="введите отзыв")
 async def process_help_command(msg: types.Message, state: FSMContext):
     texts = await state.get_data()
     texts = msg.text
-    await msg.answer("осталось только отправить", reply_markup=kb.key_otz1)
+    await msg.answer("осталось только отправить", reply_markup=kb.key_otz)
 
 
 
