@@ -1,8 +1,8 @@
-import random
-import time
 from gspread.exceptions import WorksheetNotFound
 from misc import worksheet1, sh
-from bot import worksheet_biblioteki
+from aiogram.dispatcher.filters.state import StatesGroup, State
+import random
+import time
 
 
 # Функция скачивания скачивания и сохранения библиотек
@@ -19,7 +19,7 @@ def gsheets():
 def knigi():
     dict = {}
     a = 0
-    for e in worksheet_biblioteki:
+    for e in gsheets():
         a = a + 1
         if a >= 10:
             continue
@@ -44,3 +44,14 @@ def quick_distance(lat1, lng1, lat2, lng2):
     x = lat2 - lat1
     y = (lng2 - lng1) * cos((lat2 + lat1) * 0.00872664626)
     return int((111.138 * sqrt(x * x + y * y)) * 1000)
+
+
+# Состояния
+class St(StatesGroup):
+    book0 = State()  # Поиск книги
+    book = State()  # Поиск книги
+    bookbron = State()  # Бронь книги
+    bookbron1 = State()  # Бронь книги
+    text1 = State()
+    texts = State()
+    pross = State()

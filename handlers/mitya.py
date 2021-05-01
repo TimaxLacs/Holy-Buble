@@ -1,19 +1,10 @@
 from aiogram.dispatcher import FSMContext
 from aiogram import types
-from aiogram.dispatcher.filters.state import StatesGroup, State
-import keyboards as kb
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from misc import dp
-from bot import worksheet_biblioteki, worksheet_poisk
-from tools.mitya import quick_distance
-
-
-# Состояния
-class St(StatesGroup):
-    book0 = State()  # Поиск книги
-    book = State()  # Поиск книги
-    bookbron = State()  # Бронь книги
-    bookbron1 = State()  # Бронь книги
+from tools.mitya import quick_distance, St
+from misc import worksheet_biblioteki, worksheet_poisk
+import keyboards as kb
 
 
 @dp.message_handler(commands="start")

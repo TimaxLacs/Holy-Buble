@@ -1,5 +1,9 @@
-
-
+from aiogram.dispatcher import FSMContext
+from aiogram import types
+from misc import worksheet_poisk
+from misc import dp
+from tools.mitya import St
+import keyboards as kb
 
 
 @dp.message_handler(text="отз")
@@ -18,16 +22,16 @@ async def otz(message: types.Message, state: FSMContext):
             bron = nekniga['бронь']
             ne_bron = "не забронировано"
             print(aid, bron)
-            if aid == user_id and bron == ne_bron : # сравниваем и если не пустата то отсылаем юзеру который в табл сообщение о просьбе оставить отзыв
-                print( aid)
-                await message.answer(f"вы недавно прочитали книгу '{cv}', не хотите ли оставить отзыв?", reply_markup=kb.key_otz)
+            if aid == user_id and bron == ne_bron:  # сравниваем и если не пустата то отсылаем юзеру который в табл сообщение о просьбе оставить отзыв
+                print(aid)
+                await message.answer(f"вы недавно прочитали книгу '{cv}', не хотите ли оставить отзыв?",
+                                     reply_markup=kb.key_otz)
 
 
 @dp.message_handler(text="Оставить отзыв")
 async def process_help_command(message: types.Message, state: FSMContext):
     await message.answer("введите отзыв")
     await St.texts.set()
-
 
 
 @dp.message_handler(state=St.texts)
@@ -50,8 +54,6 @@ async def process_help_command(message: types.Message, state: FSMContext):
     await state.finish()
 
 
-
-
 @dp.message_handler(text="Посмотреть отзовы")
 async def process_help_command(message: types.Message, state: FSMContext):
     await message.answer("Отзывы к какой книге вы хотите посмотреть?")
@@ -72,7 +74,6 @@ async def process_help_command(message: types.Message, state: FSMContext):
             otz = nekniga['отзыв']
             if aid != '' and cv == textst:
                 await message.answer(f"отзыв о книге{cv}:\n {otz}\n его написал пользователь с id{aid}")
-
 
 
 @dp.message_handler(text="Оставить отзыв")
