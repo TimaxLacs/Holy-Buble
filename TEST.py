@@ -189,7 +189,7 @@ async def process_book_name(message: types.Message, state: FSMContext):
                             biblioteka = (i["название"])
                         await message.answer(
                             f'В библиотеки по этому адресу есть нужная вам книга: {adress}.\n Название библиотеки: {biblioteka}.\n Вот растояние до этой библиотеки: {shot_rast}.',
-                            reply_markup=kb.keyboard_back_and_otz)
+                            reply_markup=kb.keyboard_back)
                     else:
                         print("Название библиотеки не коректное")
             else:
@@ -240,11 +240,11 @@ async def process_help_command(message: types.Message, state: FSMContext):
             cv = nekniga['книга']
             aid = nekniga['айди']
             user_id = message.chat.id
-            texts = message.text
+            textst = message.text
             bron = nekniga['бронь']
             ne_bron = "не забронировано"
             if bron == ne_bron and aid == user_id:
-                lost = [cv, texts, user_id]
+                lost = [cv, textst, user_id]
                 worksheet2.append_row(lost)
                 await message.answer("отзыв оставлен")
     await state.finish()
@@ -267,10 +267,10 @@ async def process_help_command(message: types.Message, state: FSMContext):
         for nekniga in spisok_knig:
             cv = nekniga['книга']
             aid = nekniga['айди']
-            texts = message.text.lower()
-            await message.reply(texts)
+            textst = message.text.lower()
+            await message.reply(textst)
             otz = nekniga['отзыв']
-            if aid != '' and cv == texts:
+            if aid != '' and cv == textst:
                 await message.answer(f"отзыв о книге{cv}:\n {otz}\n его написал пользователь с id{aid}")
 
 
