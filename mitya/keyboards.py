@@ -10,7 +10,7 @@ keyboard_menu = ReplyKeyboardMarkup(resize_keyboard=True)
 button_1 = "Ближащая библиотека"
 button_2 = "Узнать о своих книгах"
 button_3 = "Найти книгу"
-button_4 = "Оставить отзыв о книге"
+button_4 = "Оставить отзыв"
 button_5 = "Забронировать книгу"
 button_6 = "Профиль"
 button_7 = "Карта библиотек"

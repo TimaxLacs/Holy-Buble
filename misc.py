@@ -1,5 +1,9 @@
-
-
+import logging
+from aiogram import Bot
+from aiogram.dispatcher import Dispatcher
+from aiogram.contrib.fsm_storage.memory import MemoryStorage
+import time
+import gspread
 
 logging.basicConfig(level=logging.INFO)
 bot = Bot(token='1703652201:AAGit3dd0CH4ZgYlWYW-OSRQskn5lTtkeRc')
