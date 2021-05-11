@@ -2,8 +2,7 @@ from aiogram.dispatcher import FSMContext
 from aiogram import types
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from misc import dp
-from tools.mitya import quick_distance, St
-from misc import worksheet_biblioteki, worksheet_poisk
+from tools.mitya import quick_distance, St, worksheet_biblioteki, worksheet_poisk
 import keyboards as kb
 
 
@@ -15,7 +14,7 @@ async def cmd_start(message: types.Message):
 
 @dp.message_handler(text="Ближащая библиотека")
 async def process_help_command(message: types.Message):
-    await message.reply("Запрашиваем вашу геолакацию", reply_markup=kb.markup_request)
+    await message.reply("Запрашиваем вашу геолокацию", reply_markup=kb.markup_request)
 
 
 @dp.message_handler(content_types=types.ContentTypes.LOCATION)
@@ -46,11 +45,6 @@ async def process_help_command(message: types.Message):
     await message.reply("выполнено", reply_markup=kb.keyboard_back)
 
 
-@dp.message_handler(text="Оставить отзыв о книге")
-async def process_help_command(message: types.Message):
-    await message.reply("выполнено", reply_markup=kb.keyboard_back)
-
-
 @dp.message_handler(text="Забронировать книгу")
 async def process_help_command(message: types.Message):
     await message.reply("Введите название книги", reply_markup=kb.keyboard_back)
@@ -67,7 +61,7 @@ async def cmd_start(message: types.Message, state: FSMContext):
 @dp.message_handler(text="Профиль")
 async def process_help_command(message: types.Message):
     await message.answer("Ваш профиль.\n Ваш уровень: ...\n Ваш опыт: ...\n Ваше количество баллов:... ",
-                         reply_markup=kb.keyboard_back)
+                         reply_markup=kb.keyboard_menu)
 
 
 @dp.message_handler(text="Найти книгу")
@@ -78,9 +72,9 @@ async def process_help_command(message: types.Message):
 
 @dp.message_handler(text="Карта библиотек")
 async def karta(message: types.Message):
-    inline_btn_1 = InlineKeyboardButton("Проложить маршрут", url="file:///mapgen/ gafas.html")
+    inline_btn_1 = InlineKeyboardButton("Проложить маршрут", url="file:///mapgen/gafas.html")
     inline_kb1 = InlineKeyboardMarkup().add(inline_btn_1)
-    await message.answer(f'Вот карта библиотек.', reply_markup=kb.keyboard_back)
+    await message.answer(f'Вот карта библиотек.', reply_markup=kb.keyboard_menu)
     await message.answer(f'Если вы хотети её увидеть от нажмите на кнопку под этим сообщением.',
                          reply_markup=inline_kb1)
 
@@ -137,7 +131,7 @@ async def process_book_name(message: types.Message, state: FSMContext):
                             biblioteka = (i["название"])
                         await message.answer(
                             f'В библиотеки по этому адресу есть нужная вам книга: {adress}.\n Название библиотеки: {biblioteka}.\n Вот растояние до этой библиотеки: {shot_rast}.',
-                            reply_markup=kb.keyboard_back)
+                            reply_markup=kb.keyboard_menu)
     if b2 == 0:
         await message.reply("такой книги нет", reply_markup=kb.keyboard_back)
     await state.finish()
@@ -175,28 +169,27 @@ async def process_book_name(message: types.Message, state: FSMContext):
                         for bibliotek in worksheet_biblioteki:
                             nazvanie = bibliotek["название"]
                             if nazvanie_biblioteki == nazvanie:
-                                dict.update([bibliotek["название"], bibliotek['кординаты']])
-                                print(worksheet_poisk)
-                                print('Книга найдена!')
-                                a = 0
                                 f = bibliotek["кординаты"].split(", ")
                                 rast = quick_distance(message.location.latitude, message.location.longitude,
                                                       float(f[0]),
                                                       float(f[1]))  # Вычисление растояния до библиотеке.
+                                print('Книга найдена!')
+                                print(dict)
+                                a = 0
                                 if rast < shot_rast:
                                     shot_rast = rast
                                     adress = bibliotek["адрес"]
-                                await message.answer(
-                                    f'В библиотеки по этому адресу мы нужную вам книгу: {adress}.\n Название '
-                                    f'библиотеки: {nazvanie_biblioteki}.\n Вот растояние до этой библиотеки: '
-                                    f'{shot_rast}.', reply_markup=kb.keyboard_back)
+                                    await message.answer(
+                                        f'В библиотеки по этому адресу мы нужную вам книгу: {adress}.\n Название '
+                                        f'библиотеки: {nazvanie_biblioteki}.\n Вот растояние до этой библиотеки: '
+                                        f'{shot_rast}.', reply_markup=kb.keyboard_menu)
                     else:
                         await message.answer('Эта книга забронирована. Вы можете обратиться позже для того чтобы '
-                                             'забронировать её.', reply_markup=kb.keyboard_back)
+                                             'забронировать её.', reply_markup=kb.keyboard_menu)
                         print("Данная книга забронирована")
                 else:
                     a = a + 1
                     print('Данной книги нету в наличии.')
                     if a == 1:
-                        await message.reply("Данной книги нету в наличии.", reply_markup=kb.keyboard_back)
+                        await message.reply("Данной книги нету в наличии.", reply_markup=kb.keyboard_menu)
     await state.finish()

@@ -4,7 +4,6 @@ from aiogram.dispatcher import Dispatcher
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 import time
 import gspread
-from tools.mitya import gsheets, knigi
 
 
 logging.basicConfig(level=logging.INFO)
@@ -14,5 +13,4 @@ na_time = time.strftime('%M')
 gc = gspread.service_account()
 sh = gc.open("holy buble")
 worksheet1 = sh.worksheet("nazvanie").get_all_records()
-worksheet_biblioteki = gsheets()
-worksheet_poisk = knigi()
+

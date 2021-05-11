@@ -55,3 +55,7 @@ class St(StatesGroup):
     text1 = State()
     texts = State()
     pross = State()
+
+
+worksheet_biblioteki = gsheets()
+worksheet_poisk = knigi()

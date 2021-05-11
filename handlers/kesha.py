@@ -1,8 +1,7 @@
 from aiogram.dispatcher import FSMContext
 from aiogram import types
-from misc import worksheet_poisk
 from misc import dp
-from tools.mitya import St
+from tools.mitya import St, worksheet_poisk
 import keyboards as kb
 
 
