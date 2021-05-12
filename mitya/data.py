@@ -1,5 +1,0 @@
-
-text =
-
-s =
-print(s)

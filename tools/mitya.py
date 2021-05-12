@@ -1,6 +1,7 @@
 from gspread.exceptions import WorksheetNotFound
 from misc import worksheet1, sh
 from aiogram.dispatcher.filters.state import StatesGroup, State
+from misc import profil, knigi_polzovately
 import random
 import time
 
@@ -46,6 +47,24 @@ def quick_distance(lat1, lng1, lat2, lng2):
     return int((111.138 * sqrt(x * x + y * y)) * 1000)
 
 
+def profile():
+    for i in profil:
+        try:
+            print(profil)
+            return profil
+        except WorksheetNotFound:
+            print(f'!!! -> Страница "{i["название"]}" не найдена <- !!!')
+
+
+def knigi_and_id_polzovately():
+    for i in profil:
+        try:
+            print(knigi_polzovately)
+            return knigi_polzovately
+        except WorksheetNotFound:
+            print(f'!!! -> Страница "{i["название"]}" не найдена <- !!!')
+
+
 # Состояния
 class St(StatesGroup):
     book0 = State()  # Поиск книги
@@ -59,3 +78,5 @@ class St(StatesGroup):
 
 worksheet_biblioteki = gsheets()
 worksheet_poisk = knigi()
+worksheet_profile = profile()
+worksheet_o_knigax = knigi_and_id_polzovately()

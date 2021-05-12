@@ -13,4 +13,6 @@ na_time = time.strftime('%M')
 gc = gspread.service_account()
 sh = gc.open("holy buble")
 worksheet1 = sh.worksheet("nazvanie").get_all_records()
-
+worksheet2 = sh.worksheet("отзывы").get_all_records()
+profil = sh.worksheet("профиль").get_all_records()
+knigi_polzovately = sh.worksheet("Книги пользователей").get_all_records()

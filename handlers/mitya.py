@@ -2,7 +2,8 @@ from aiogram.dispatcher import FSMContext
 from aiogram import types
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from misc import dp
-from tools.mitya import quick_distance, St, worksheet_biblioteki, worksheet_poisk
+from tools.mitya import quick_distance, St, worksheet_biblioteki, worksheet_poisk, worksheet_profile
+from misc import knigi_polzovately
 import keyboards as kb
 
 
@@ -42,7 +43,19 @@ async def rppr(message: types.Message):
 
 @dp.message_handler(text="Узнать о своих книгах")
 async def process_help_command(message: types.Message):
-    await message.reply("выполнено", reply_markup=kb.keyboard_back)
+    for i in knigi_polzovately:
+        id = i["id"]
+        spisok_knig = i["spisok_knig"]
+
+        if id == message.from_user.id:
+            if spisok_knig != '':
+                print(spisok_knig)
+                await message.reply(f"Вот ваши книги которые ещё не сданы: {spisok_knig}", reply_markup=kb.keyboard_back)
+            else:
+                await message.reply("У вас сданы все книги.")
+        else:
+            print("Такого айди нет")
+            await message.answer("Вы не брали ещё не одной книги в библиотеках которые сотрудничают с нами.")
 
 
 @dp.message_handler(text="Забронировать книгу")
@@ -60,8 +73,18 @@ async def cmd_start(message: types.Message, state: FSMContext):
 
 @dp.message_handler(text="Профиль")
 async def process_help_command(message: types.Message):
-    await message.answer("Ваш профиль.\n Ваш уровень: ...\n Ваш опыт: ...\n Ваше количество баллов:... ",
-                         reply_markup=kb.keyboard_menu)
+    print(message.from_user.id)
+    for i in worksheet_profile:
+        id = i["id"]
+        lvl = i["уровень"]
+        exp = i["опыт"]
+        balls = i["баллы"]
+        if id == message.from_user.id:
+            await message.answer(
+                f"Ваш профиль.\n Ваш уровень: {lvl} \n Ваш опыт: {exp} \n Ваше количество баллов: {balls} ",
+                reply_markup=kb.keyboard_menu)
+        else:
+            await message.answer("Вы ещё не получали баллы и не состоите в базе данных.")
 
 
 @dp.message_handler(text="Найти книгу")
@@ -72,11 +95,9 @@ async def process_help_command(message: types.Message):
 
 @dp.message_handler(text="Карта библиотек")
 async def karta(message: types.Message):
-    inline_btn_1 = InlineKeyboardButton("Проложить маршрут", url="file:///mapgen/gafas.html")
+    inline_btn_1 = InlineKeyboardButton("Проложить маршрут", url="")
     inline_kb1 = InlineKeyboardMarkup().add(inline_btn_1)
-    await message.answer(f'Вот карта библиотек.', reply_markup=kb.keyboard_menu)
-    await message.answer(f'Если вы хотети её увидеть от нажмите на кнопку под этим сообщением.',
-                         reply_markup=inline_kb1)
+    await message.answer(f'Эта функция на данный момент в разработке.', reply_markup=kb.keyboard_menu)
 
 
 @dp.message_handler(state=St.book0)
@@ -129,11 +150,11 @@ async def process_book_name(message: types.Message, state: FSMContext):
                             shot_rast = rast
                             adress = i["адрес"]
                             biblioteka = (i["название"])
-                        await message.answer(
-                            f'В библиотеки по этому адресу есть нужная вам книга: {adress}.\n Название библиотеки: {biblioteka}.\n Вот растояние до этой библиотеки: {shot_rast}.',
-                            reply_markup=kb.keyboard_menu)
+                            await message.answer(
+                                f'В библиотеки по этому адресу есть нужная вам книга: {adress}.\n Название библиотеки: {biblioteka}.\n Вот растояние до этой библиотеки: {shot_rast}.',
+                                reply_markup=kb.keyboard_menu)
     if b2 == 0:
-        await message.reply("такой книги нет", reply_markup=kb.keyboard_back)
+        await message.reply("Такой книги нет возможно вы написали название не правильно.", reply_markup=kb.keyboard_back)
     await state.finish()
 
 

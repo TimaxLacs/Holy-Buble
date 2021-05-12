@@ -3,6 +3,7 @@ from aiogram import types
 from misc import dp
 from tools.mitya import St, worksheet_poisk
 import keyboards as kb
+from misc import worksheet2
 
 
 @dp.message_handler(text="отз")
