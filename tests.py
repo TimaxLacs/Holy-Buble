@@ -5,11 +5,12 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram import types
 from aiogram.dispatcher.filters.state import StatesGroup, State
 import keyboards as kb
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 import gspread
 import time
-import datetime
+from datetime import datetime
 import random
+import re
 
 logging.basicConfig(level=logging.INFO)
 bot = Bot(token="1255862313:AAFWPZqLgPlHH-SXkfji79nLshUjp_SqwDk")
@@ -31,6 +32,10 @@ class St(StatesGroup):
     texts = State()
     pross = State()
     otz = State()
+    spotz = State()
+    addotz = State()
+
+
 
 
 def gsheets():
@@ -47,7 +52,7 @@ def knigi():
     a = 0
     for e in worksheet_biblioteki:
         a = a + 1
-        if a >= 10:
+        if a >= 1:
             continue
         try:
             print(f'--> Обрабатываю {e["название"]}')
@@ -115,7 +120,12 @@ async def process_help_command(message: types.Message):
 
 @dp.message_handler(text="Оставить отзыв о книге")
 async def process_help_command(message: types.Message):
-    await message.reply("В разработке", reply_markup=kb.keyboard_back)
+    await message.reply("ввидите название книги к которой вы хотите оставить отзыв", reply_markup=kb.keyboard_back)
+    await St.addotz.set()
+
+
+
+
 
 
 @dp.message_handler(text="Забронировать книгу")
@@ -209,29 +219,121 @@ async def process_book_name(message: types.Message, state: FSMContext):
 
 
 
-@dp.message_handler(state=St.otz)
-async def otz(message: types.Message, state: FSMContext):
-    while True:
-        print("-------")
+
+
+
+@dp.callback_query_handler(lambda c: c.data and c.data.startswith('btn'))
+async def process_callback_kb1btn1(callback_query: types.CallbackQuery):
+    code = callback_query.data[-1]
+    if code.isdigit():
+        code = int(code)
+    if code == 1:
         for sd in worksheet_poisk:
             print(worksheet_poisk)
             nazvsnie_biblioteki = sd
             spisok_knig = worksheet_poisk[nazvsnie_biblioteki]
             for nekniga in spisok_knig:
-                print("---------", nekniga)
+                zanr = nekniga["жанр"]
                 cv = nekniga['книга']
-                print("-----------------", cv)
-                aid = nekniga['айди']
-                print(aid)
-                user_id = message.chat.id
-                bron = nekniga['бронь']
-                ne_bron = "не забронировано"
-                print(aid, bron)
-                if aid == user_id and bron == ne_bron:  # сравниваем и если не пустата то отсылаем юзеру который в табл сообщение о просьбе оставить отзыв
-                    print(aid)
-                    await message.answer(f"вы недавно прочитали книгу '{cv}', не хотите ли оставить отзыв?",
-                                        reply_markup=kb.keyboard_net_and_otz)
-                    time.sleep(50)
+                proza = 'проза'
+                #print(cv)
+                #print(zanr, "1111111")
+                zanrr = re.split(',', zanr)
+                print(zanrr, 2222)
+                zanr_proza = str('проза')
+                print(zanr_proza, 000000)
+                for i in zanrr:
+                    print(i)
+                    if i == zanr_proza:
+                        print(zanr_proza, 33333)
+
+                        print(cv, ">>>>", zanr_proza)
+                        await bot.send_message(callback_query.from_user.id, f"{cv} >>>> {zanr_proza}")
+    elif code == 2:
+        for sd in worksheet_poisk:
+            print(worksheet_poisk)
+            nazvsnie_biblioteki = sd
+            spisok_knig = worksheet_poisk[nazvsnie_biblioteki]
+            for nekniga in spisok_knig:
+                zanr = nekniga["жанр"]
+                cv = nekniga['книга']
+                zanrr = re.split(',', zanr)
+                print(zanrr, 2222)
+                zanr_proza = str('фентези')
+                print(zanr_proza, 000000)
+                for i in zanrr:
+                    print(i)
+                    if i == zanr_proza:
+                        print(zanr_proza, 33333)
+                        print(cv, ">>>>", zanr_proza)
+                        await bot.send_message(callback_query.from_user.id, f"{cv} >>>> {zanr_proza}")
+    elif code == 3:
+        for sd in worksheet_poisk:
+            print(worksheet_poisk)
+            nazvsnie_biblioteki = sd
+            spisok_knig = worksheet_poisk[nazvsnie_biblioteki]
+            for nekniga in spisok_knig:
+                zanr = nekniga["жанр"]
+                cv = nekniga['книга']
+                zanrr = re.split(',', zanr)
+                print(zanrr, 2222)
+                zanr_proza = str('роман')
+                print(zanr_proza, 000000)
+                for i in zanrr:
+                    print(i)
+                    if i == zanr_proza:
+                        print(zanr_proza, 33333)
+                        print(cv, ">>>>", zanr_proza)
+                        await bot.send_message(callback_query.from_user.id, f"{cv} >>>> {zanr_proza}")
+    elif code == 4:
+        for sd in worksheet_poisk:
+            print(worksheet_poisk)
+            nazvsnie_biblioteki = sd
+            spisok_knig = worksheet_poisk[nazvsnie_biblioteki]
+            for nekniga in spisok_knig:
+                zanr = nekniga["жанр"]
+                cv = nekniga['книга']
+                zanrr = re.split(',', zanr)
+                print(zanrr, 2222)
+                zanr_proza = str('эротика')
+                print(zanr_proza, 000000)
+                for i in zanrr:
+                    print(i)
+                    if i == zanr_proza:
+                        print(zanr_proza, 33333)
+                        print(cv, ">>>>", zanr_proza)
+                        await bot.send_message(callback_query.from_user.id, f"{cv} >>>> {zanr_proza}")
+    elif code == 5:
+        for sd in worksheet_poisk:
+            print(worksheet_poisk)
+            nazvsnie_biblioteki = sd
+            spisok_knig = worksheet_poisk[nazvsnie_biblioteki]
+            for nekniga in spisok_knig:
+                zanr = nekniga["жанр"]
+                cv = nekniga['книга']
+                zanrr = re.split(',', zanr)
+                print(zanrr, 2222)
+                zanr_proza = str('детектив')
+                print(zanr_proza, 000000)
+                for i in zanrr:
+                    print(i)
+                    if i == zanr_proza:
+                        print(zanr_proza, 33333)
+                        print(cv, ">>>>", zanr_proza)
+                        await bot.send_message(callback_query.from_user.id, f"{cv} >>>> {zanr_proza}")
+    else:
+        await bot.answer_callback_query(callback_query.id)
+
+
+
+@dp.message_handler(text="Поиск книги по жанру")
+async def process_command_2(message: types.Message):
+    await message.reply("выбирите жанр книги", reply_markup=kb.inline_kb_full)
+
+
+
+
+
 
 
 @dp.message_handler(state=St.otz)
@@ -255,6 +357,8 @@ async def otz(message: types.Message, state: FSMContext):
                 print(aid)
                 await message.answer(f"вы недавно прочитали книгу '{cv}', не хотите ли оставить отзыв?",
                                              reply_markup=kb.keyboard_net_and_otz)
+                time.sleep(10)
+
 
 
 
@@ -321,10 +425,78 @@ async def process_help_command(msg: types.Message, state: FSMContext):
 
 
 
-
+@dp.message_handler()
+async def otz(message: types.Message, state: FSMContext):
+    print("+++++")
+    await St.otz.set()
+    print("=====")
 
 if __name__ == '__main__':
     worksheet_biblioteki = gsheets()
     worksheet_poisk = knigi()
     executor.start_polling(dp, skip_updates=True)
+
+
+
+
+
+def knigi():
+    dict = {}
+    a = 0
+    time_now = datetime.now().strftime("%M")
+    zero_time = 00
+    if time_now == zero_time:
+        for e in worksheet_biblioteki:
+            a = a + 1
+            if a >= 10:
+                continue
+            try:
+                print(f'--> Обрабатываю {e["название"]}')
+                worksheet_knigi = sh.worksheet(e["название"]).get_all_records()
+                if worksheet_knigi != []:
+                    kniga = [(e["название"], worksheet_knigi), ]
+                    dict.update(kniga)
+                else:
+                    print('!!! -> Лист пуст <- !!!')
+            except gspread.exceptions.WorksheetNotFound:
+                print(f'!!! -> Лист "{e["название"]}" не найден <- !!!')
+            time.sleep(random.randint(2, 3))
+        print(dict)
+        return dict
+
+
+
+#TODO если в отзовах пусто,  то ничего не присылает
+
+@dp.message_handler(state=St.otz)
+async def otz(message: types.Message, state: FSMContext):
+    print("-------")
+    for sd in worksheet_poisk:
+        print(worksheet_poisk)
+        nazvsnie_biblioteki = sd
+        spisok_knig = worksheet_poisk[nazvsnie_biblioteki]
+        for nekniga in spisok_knig:
+            print("---------", nekniga)
+            cv = nekniga['книга']
+            print("-----------------", cv)
+            aid = nekniga['айди']
+            print(aid)
+            user_id = message.chat.id
+            bron = nekniga['бронь']
+            ne_bron = "не забронировано"
+            print(aid, bron)
+            if aid == user_id and bron == ne_bron:  # сравниваем и если не пустата то отсылаем юзеру который в табл сообщение о просьбе оставить отзыв
+                print(aid)
+                for o in worksheet2:
+                    worksheet_otz = sh.worksheet(o['отзыв']).get_all_records()
+                    worksheet_id =  sh.worksheet(o['айди']).get_all_records()
+                    print("++++++++++++++", worksheet_otz, worksheet_id, "++++++++++++++")
+                    if worksheet_id == user_id and worksheet_otz != ():
+                        print(worksheet_otz, worksheet_id)
+                        await message.answer(f"вы недавно прочитали книгу '{cv}', не хотите ли оставить отзыв?",
+                                             reply_markup=kb.keyboard_net_and_otz)
+                    else:
+                        print("noooooooooo")
+
+
 
