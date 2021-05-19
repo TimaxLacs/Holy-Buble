@@ -52,7 +52,7 @@ def knigi():
     a = 0
     for e in worksheet_biblioteki:
         a = a + 1
-        if a >= 1:
+        if a >= 10:
             continue
         try:
             print(f'--> Обрабатываю {e["название"]}')

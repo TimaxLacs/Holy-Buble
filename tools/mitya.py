@@ -74,6 +74,10 @@ class St(StatesGroup):
     text1 = State()
     texts = State()
     pross = State()
+    pross = State()
+    otz = State()
+    spotz = State()
+    addotz = State()
 
 
 worksheet_biblioteki = gsheets()
