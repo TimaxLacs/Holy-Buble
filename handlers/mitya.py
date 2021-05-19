@@ -158,3 +158,4 @@ async def process_help_command(message: types.Message, state: FSMContext):
     shot_rast = data['short_rast']
     await message.answer(
         f'Мы забронировали нужную вам книгу.', reply_markup=kb.keyboard_menu)
+    await state.finish()
