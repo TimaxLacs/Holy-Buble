@@ -44,7 +44,7 @@ def quick_distance(lat1, lng1, lat2, lng2):
     from math import cos, sqrt
     x = lat2 - lat1
     y = (lng2 - lng1) * cos((lat2 + lat1) * 0.00872664626)
-    return int((111.138 * sqrt(x * x + y * y)) * 1000)
+    return int((111.138 * sqrt(x * x + y * y)))
 
 
 def profile():
@@ -73,7 +73,6 @@ class St(StatesGroup):
     bookbron1 = State()  # Бронь книги
     text1 = State()
     texts = State()
-    pross = State()
     pross = State()
     otz = State()
     spotz = State()
