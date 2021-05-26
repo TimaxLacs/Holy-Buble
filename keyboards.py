@@ -11,9 +11,13 @@ button_5 = "Профиль"
 button_6 = "Карта библиотек"
 button_7 = "Поиск книг по жанрам"
 button_back = "Назад"
+button_net = "Нет"
 but_pros = "просмотреть отзовы"
 button_bron = "Забронировать книгу"
 
+
+keyboard_net_and_otz = ReplyKeyboardMarkup(resize_keyboard=True)
+keyboard_net_and_otz.add(button_4, button_net)
 
 markup_request = ReplyKeyboardMarkup(resize_keyboard=True).add(
     KeyboardButton('Отправить свою локацию 🗺️', request_location=True), button_back)
