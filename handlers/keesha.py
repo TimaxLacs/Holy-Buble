@@ -1,6 +1,8 @@
+from datetime import time
+
 from aiogram.dispatcher import FSMContext
 from aiogram import types
-from misc import dp
+from misc import dp, bot
 from tools.mitya import St, worksheet_poisk
 import keyboards as kb
 from misc import worksheet2
