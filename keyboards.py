@@ -13,13 +13,13 @@ button_7 = "Поиск книг по жанрам"
 button_back = "Назад"
 but_pros = "просмотреть отзовы"
 button_bron = "Забронировать книгу"
+keyboard_menu.add(button_1, button_2).add(button_3, button_4).add(button_5, button_7).add(button_6)
 
 
 markup_request = ReplyKeyboardMarkup(resize_keyboard=True).add(
     KeyboardButton('Отправить свою локацию 🗺️', request_location=True), button_back)
 
-keyboard_menu = ReplyKeyboardMarkup(resize_keyboard=True)
-keyboard_menu.add(button_1, button_2).add(button_3, button_4).add(button_5, button_7).add(button_6)
+
 
 
 keyboard_bron = ReplyKeyboardMarkup(resize_keyboard=True)
@@ -48,4 +48,8 @@ key_otz.add(button_4)
 keyboard_back = ReplyKeyboardMarkup(resize_keyboard=True)
 keyboard_back.add(button_back)
 
+button_net = "Нет"
+
+keyboard_net_and_otz = ReplyKeyboardMarkup(resize_keyboard=True)
+keyboard_net_and_otz.add(button_4, button_net)
 

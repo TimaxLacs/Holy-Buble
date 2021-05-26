@@ -34,8 +34,8 @@ async def process_callback_kb1btn1(callback_query: types.CallbackQuery):
                 zanr = nekniga["жанр"]
                 cv = nekniga['книга']
                 proza = 'проза'
-                #print(cv)
-                #print(zanr, "1111111")
+                # print(cv)
+                # print(zanr, "1111111")
                 zanrr = re.split(',', zanr)
                 print(zanrr, 2222)
                 zanr_proza = str('проза')
@@ -123,15 +123,9 @@ async def process_callback_kb1btn1(callback_query: types.CallbackQuery):
         await bot.answer_callback_query(callback_query.id)
 
 
-
 @dp.message_handler(text="Поиск книги по жанру")
 async def process_command_2(message: types.Message):
     await message.reply("выбирите жанр книги", reply_markup=kb.inline_kb_full)
-
-
-
-
-
 
 
 @dp.message_handler(state=St.otz)
@@ -154,17 +148,14 @@ async def otz(message: types.Message, state: FSMContext):
             if aid == user_id and bron == ne_bron:  # сравниваем и если не пустата то отсылаем юзеру который в табл сообщение о просьбе оставить отзыв
                 print(aid)
                 await message.answer(f"вы недавно прочитали книгу '{cv}', не хотите ли оставить отзыв?",
-                                             reply_markup=kb.keyboard_net_and_otz)
+                                     reply_markup=kb.keyboard_net_and_otz)
                 time.sleep(10)
-
-
 
 
 @dp.message_handler(text="Оставить отзыв")
 async def process_help_command(message: types.Message, state: FSMContext):
     await message.answer("введите отзыв")
     await St.texts.set()
-
 
 
 @dp.message_handler(state=St.texts)
@@ -185,8 +176,6 @@ async def process_help_command(message: types.Message, state: FSMContext):
                 worksheet2.append_row(lost)
                 await message.answer("отзыв оставлен")
     await state.finish()
-
-
 
 
 @dp.message_handler(text="Посмотреть отзовы")
@@ -211,7 +200,6 @@ async def process_help_command(message: types.Message, state: FSMContext):
                 await message.answer(f"отзыв о книге{cv}:\n {otz}\n его написал пользователь с id{aid}")
 
 
-
 @dp.message_handler(text="Оставить отзыв")
 async def process_help_command(msg: types.Message, state: FSMContext):
     await msg.answer("Введите отзыв")
@@ -221,11 +209,8 @@ async def process_help_command(msg: types.Message, state: FSMContext):
     worksheet2.append_row(lost)
 
 
-
-
 @dp.message_handler()
 async def otz(message: types.Message, state: FSMContext):
     print("+++++")
     await St.otz.set()
     print("=====")
-
